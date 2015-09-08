@@ -1,27 +1,19 @@
-# docker-centos7-nfs-client-autofs
-This Centos7 client runs systemd and installs NFS utils and autofs for NFS client functionality.
+# docker-oraclelinux7-nfs-client-autofs
 
-I created a new Centos7 NFS client that leverages images that run systemd to allow us to do the following:
+This image runs systemd to allow us to do the following:
 
-Connect to NFSv3 and NFSv4.1 shares
-Use autofs to leverage automounter
-The client requires a script to run after the image is started.
+- Connect to NFSv3 and NFSv4 shares
+- Use autofs to leverage automounter
+- Run SSH server
 
-The Dockerfile configures autofs with a mount. That part of the file would need to be customized.
+## Build the Docker image
 
-Steps to run this image:
+> docker build -t *image* .
 
-1) Create folder on Docker host 2) Copy script and dbus.service files to the folder. 3) Copy Dockerfile contents to new Dockerfile instance and modify the necessary attributes. 4) Build the Docker image:
+## Run the Docker image
 
-docker build -t name/centos7-nfs-client-autofs .
+> docker run --privileged -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro *image*
 
-5) Run the Docker image to start systemd with the following syntax:
+## Access the running container
 
-docker run –privileged -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro parisi/nfs-client sh -c “/usr/lib/systemd/systemd”
-
-6) Get the Docker image ID. Access the client with the docker exec command:
-
-docker images docker exec -t -i [docker image ID] /bin/bash
-
-Full results posted in this blog post:
-https://whyistheinternetbroken.wordpress.com/2015/05/12/techusing-nfs-with-docker-where-does-it-fit-in/
+> docker exec -it *container* bash
